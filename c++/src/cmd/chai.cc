@@ -211,6 +211,8 @@ int run(int argc, char **argv) {
 
     try {
         chai.eval_file(argv[1]);
+    } catch (const chaiscript::exception::eval_error &e) {
+        std::cerr << "Error\n" << e.pretty_print() << '\n';
     } catch (const exit_exception &e) {
         return e.get_code();
     }
@@ -311,7 +313,11 @@ int run_script(char *script) {
     chaiscript::ChaiScript chai;
     mime::add_bindings(chai);
 
-    chai.eval(script);
+    try {
+        chai.eval(script);
+    } catch (const chaiscript::exception::eval_error &e) {
+        std::cerr << "Error\n" << e.pretty_print() << '\n';
+    }
 
     return 0;
 }
